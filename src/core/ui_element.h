@@ -1,14 +1,17 @@
 #ifndef UI_ELEMENT_H
 #define UI_ELEMENT_H
 
-#include <strings>
+#include <string>
 #include <memory>
 
 class UiElement {
 public:
     UiElement();
-    UiElement(std::weak_ptr<UiElement> parent);
+    UiElement(const std::weak_ptr<UiElement> &parent);
     virtual ~UiElement();
+
+    void setName(const std::string &name);
+    std::string name() const;
 
     std::weak_ptr<UiElement> parent() const;
     virtual std::string toString() const;

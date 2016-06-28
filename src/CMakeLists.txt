@@ -1,5 +1,2 @@
-project(morph)
-
-set(sources
-main.cpp
-)
+add_subdirectory(core)
+add_subdirectory(browser)
