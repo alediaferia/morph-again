@@ -8,10 +8,19 @@ int main(int argc, char *argv[]) {
     Parser parser;
     while (true) {
         std::cin >> input;
-        Parser::Token tok = parser.nextToken(input.cbegin(), input.cend());
-        if (tok == Parser::TOK_IDENT) {
-            std::cout << "id: " << parser.lastIdentifier() << std::endl;
-        }
+        auto it = input.cbegin();
+        auto end = input.cend();
+
+        do {
+            Parser::Token tok = parser.nextToken(it, end);
+            if (tok == Parser::TOK_IDENT) {
+                std::cout << "node: " << parser.lastIdentifier() << std::endl;
+            } else if (tok == Parser::TOK_ATTR_OPEN) {
+                std::cout << "attr begin;" << std::endl;
+            } else if (tok == Parser::TOK_ATTR_CLOSE) {
+                std::cout << "attr end;" << std::endl;
+            }
+        } while (it != end);
     }
 
     return 0;

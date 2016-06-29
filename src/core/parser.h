@@ -19,14 +19,15 @@ public:
 
     std::string lastIdentifier() const;
 
-    Token nextToken(std::string::const_iterator it,
-                    std::string::const_iterator end);
+    Token nextToken(std::string::const_iterator &it,
+                    std::string::const_iterator &end);
 protected:
 
 private:
     std::string _currentIdentifier;
     std::string _currentLiteral;
     int _currentNum;
+    int _lastChar;
 };
 
 #endif // PARSER_H
