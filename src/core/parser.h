@@ -13,6 +13,7 @@ public:
         TOK_INDENT,
         TOK_NUM, // number (int)
         TOK_LIT, // literal
+        TOK_EOL,
         TOK_UNKNOWN
     };
     Parser();

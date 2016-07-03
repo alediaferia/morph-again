@@ -3,7 +3,8 @@
 #include <iostream>
 
 Parser::Parser() :
-_lastChar(' ')
+_lastChar(' '),
+_currentNum(0)
     {}
 
 Parser::Token Parser::nextToken(std::string::const_iterator &it,
@@ -11,7 +12,7 @@ Parser::Token Parser::nextToken(std::string::const_iterator &it,
     while (it != end && isspace(_lastChar))
         _lastChar = *(it++);
 
-    if (isalpha(_lastChar)) { // might be an identifier
+    if (isalpha(_lastChar)) { // checking for identifier
         _currentIdentifier.clear();
         _currentIdentifier += _lastChar;
         _lastChar = *(it++);
@@ -21,23 +22,35 @@ Parser::Token Parser::nextToken(std::string::const_iterator &it,
                 break;
             _lastChar = *(it++);
         }
-
         return TOK_IDENT;
     }
 
     if (_lastChar == '{') {
-        _lastChar = *(it++);
+        if (it != end)
+            _lastChar = *(it++);
+        else
+            _lastChar = ' ';
         return TOK_ATTR_OPEN;
     }
 
     if (_lastChar == '}') {
-        _lastChar = *(it++);
+        if (it != end)
+            _lastChar = *(it++);
+        else
+            _lastChar = ' ';
         return TOK_ATTR_CLOSE;
     }
 
     if (_lastChar == ':') {
-        _lastChar = *(it++);
+        if (it != end)
+            _lastChar = *(it++);
+        else
+            _lastChar = ' ';
         return TOK_ATTR_SEP;
+    }
+    
+    if (it == end) {
+        return TOK_EOL;
     }
 
     return TOK_UNKNOWN;
