@@ -49,6 +49,19 @@ Parser::Token Parser::nextToken(std::string::const_iterator &it,
         return TOK_ATTR_SEP;
     }
     
+    if (_lastChar == '"') {
+        _currentLiteral.clear();
+        if (it != end)
+            _lastChar = *(it++);
+        do {
+            if (_lastChar == '"')
+                return TOK_LIT;
+            _currentLiteral += _lastChar;
+            _lastChar = *(it++);
+        } while (it != end);
+
+    }
+    
     if (it == end) {
         return TOK_EOL;
     }
@@ -58,4 +71,8 @@ Parser::Token Parser::nextToken(std::string::const_iterator &it,
 
 std::string Parser::lastIdentifier() const {
     return _currentIdentifier;
+}
+
+std::string Parser::lastLiteral() const {
+    return _currentLiteral;
 }

@@ -19,6 +19,7 @@ public:
     Parser();
 
     std::string lastIdentifier() const;
+    std::string lastLiteral() const;
 
     Token nextToken(std::string::const_iterator &it,
                     std::string::const_iterator &end);

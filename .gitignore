@@ -1,0 +1,6 @@
+nbproject
+*.a
+CMakeCache
+Makefile
+cmake_install.cmake
+

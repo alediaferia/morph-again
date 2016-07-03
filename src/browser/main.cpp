@@ -19,6 +19,8 @@ int main(int argc, char *argv[]) {
                 std::cout << "attr begin;" << std::endl;
             } else if (tok == Parser::TOK_ATTR_CLOSE) {
                 std::cout << "attr end;" << std::endl;
+            } else if (tok == Parser::TOK_LIT) {
+                std::cout << "Literal: \"" << parser.lastLiteral() << "\"" << std::endl;
             } else if (tok == Parser::TOK_EOL) {
                 break;
             }
