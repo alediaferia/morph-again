@@ -14,6 +14,8 @@
 #ifndef ATTRIBUTE_H
 #define ATTRIBUTE_H
 
+#include <string>
+
 class Attribute {
 public:
     enum ValueType {
@@ -24,11 +26,14 @@ public:
     Attribute();
     Attribute(const Attribute& orig);
     Attribute(const std::string &name, int value);
-    Attribute(const std::string &name, const std::string &value);
+    // Attribute(const std::string &name, const std::string &value);
     virtual ~Attribute();
     
-    
+    int value() const;
+    std::string name() const;
+
 private:
+    std::string _name;
     std::string _stringValue;
     int _intValue;
 };

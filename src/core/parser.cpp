@@ -1,4 +1,5 @@
 #include "parser.h"
+#include "attribute.h"
 
 #include <iostream>
 
@@ -25,6 +26,16 @@ Parser::Token Parser::nextToken(std::string::const_iterator &it,
         return TOK_IDENT;
     }
 
+    if (isdigit(_lastChar)) { // number [0-9]
+        std::string num;
+        do {
+          num += _lastChar;
+        } while (it != end && isdigit((_lastChar = *(it++))));
+        _currentNum = strtol(num.c_str(), nullptr, 10);
+
+        return TOK_NUM;
+    }
+
     if (_lastChar == '{') {
         if (it != end)
             _lastChar = *(it++);
@@ -47,6 +58,14 @@ Parser::Token Parser::nextToken(std::string::const_iterator &it,
         else
             _lastChar = ' ';
         return TOK_ATTR_SEP;
+    }
+
+    if (_lastChar == ',') {
+        if (it != end)
+            _lastChar = *(it++);
+        else
+            _lastChar = ' ';
+        return TOK_COMMA;
     }
     
     if (_lastChar == '"') {
@@ -76,3 +95,28 @@ std::string Parser::lastIdentifier() const {
 std::string Parser::lastLiteral() const {
     return _currentLiteral;
 }
+
+std::unique_ptr<Attribute> Parser::parseAttribute(StrIterator &it, StrIterator &end) {
+    Token tok = nextToken(it, end);
+    if (tok != TOK_IDENT) {
+        std::cerr << "Syntax: got " << tok << " but expected identifier" << std::endl;
+        return std::unique_ptr<Attribute>();
+    }
+
+    std::string name(_currentIdentifier);
+    
+    tok = nextToken(it, end);
+    if (tok != TOK_ATTR_SEP) {
+        std::cerr << "Syntax: got " << tok << " but expected :" << std::endl;
+        return std::unique_ptr<Attribute>();
+    }
+
+    tok = nextToken(it, end);
+    if (tok != TOK_NUM) {
+		std::cerr << "Syntax: got " << tok << " but expected a number" << std::endl;
+		return std::unique_ptr<Attribute>();
+	}
+
+	return std::unique_ptr<Attribute>(new Attribute(name, _currentNum));
+}
+
