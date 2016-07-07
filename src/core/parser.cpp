@@ -13,11 +13,11 @@ Parser::Token Parser::nextToken(std::string::const_iterator &it,
     while (it != end && isspace(_lastChar))
         _lastChar = *(it++);
 
-    if (isalpha(_lastChar)) { // checking for identifier
+    if (std::isalpha(_lastChar)) { // checking for identifier
         _currentIdentifier.clear();
         _currentIdentifier += _lastChar;
         _lastChar = *(it++);
-        while (isalnum(_lastChar) || _lastChar == '-') {
+        while (std::isalnum(_lastChar) || _lastChar == '-') {
             _currentIdentifier += _lastChar;
             if (it == end)
                 break;
@@ -96,11 +96,11 @@ std::string Parser::lastLiteral() const {
     return _currentLiteral;
 }
 
-std::unique_ptr<Attribute> Parser::parseAttribute(StrIterator &it, StrIterator &end) {
+std::shared_ptr<Attribute> Parser::parseAttribute(StrIterator &it, StrIterator &end) {
     Token tok = nextToken(it, end);
     if (tok != TOK_IDENT) {
         std::cerr << "Syntax: got " << tok << " but expected identifier" << std::endl;
-        return std::unique_ptr<Attribute>();
+        return std::shared_ptr<Attribute>();
     }
 
     std::string name(_currentIdentifier);
@@ -108,15 +108,43 @@ std::unique_ptr<Attribute> Parser::parseAttribute(StrIterator &it, StrIterator &
     tok = nextToken(it, end);
     if (tok != TOK_ATTR_SEP) {
         std::cerr << "Syntax: got " << tok << " but expected :" << std::endl;
-        return std::unique_ptr<Attribute>();
+        return std::shared_ptr<Attribute>();
     }
 
     tok = nextToken(it, end);
     if (tok != TOK_NUM) {
-		std::cerr << "Syntax: got " << tok << " but expected a number" << std::endl;
-		return std::unique_ptr<Attribute>();
-	}
+	    std::cerr << "Syntax: got " << tok << " but expected a number" << std::endl;
+	    return std::shared_ptr<Attribute>();
+    }
 
-	return std::unique_ptr<Attribute>(new Attribute(name, _currentNum));
+    return std::shared_ptr<Attribute>(new Attribute(name, _currentNum));
+}
+
+std::set<std::shared_ptr<Attribute>> Parser::parseAttributes(StrIterator &it, StrIterator &end) {
+    Token tok = nextToken(it, end);
+    if (tok != TOK_ATTR_OPEN) {
+        std::cerr << "Syntax: got " << tok << " but expected {" << std::endl;
+        return decltype(Parser::parseAttributes(it, end))();
+    }    
+    auto attributes = decltype(Parser::parseAttributes(it, end))();
+
+    while (true) {
+        tok = nextToken(it, end);
+        if (tok == TOK_EOL) {
+            std::cerr << "Syntax: unexpected end of input: expected }" << std::endl;
+            return decltype(Parser::parseAttributes(it, end))();
+        } else if (tok == TOK_ATTR_CLOSE) {
+            return attributes;
+        } else if (tok == TOK_COMMA) {
+            auto attr = parseAttribute(it, end);
+            if (!attr) {
+                return decltype(Parser::parseAttributes(it, end))();
+            }
+            attributes.insert(attr);
+            continue;
+        }
+    }
+
+    return attributes;
 }
 

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <memory>
+#include <set>
 
 class Attribute;
 
@@ -28,8 +29,10 @@ public:
 
     Token nextToken(StrIterator &it,
                     StrIterator &end);
-    std::unique_ptr<Attribute> parseAttribute(StrIterator &it,
+    std::shared_ptr<Attribute> parseAttribute(StrIterator &it,
 		    			      StrIterator &end);
+    std::set<std::shared_ptr<Attribute>> parseAttributes(StrIterator &it,
+		    					StrIterator &end);
 protected:
 
 private:

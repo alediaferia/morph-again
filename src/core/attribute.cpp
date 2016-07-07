@@ -12,11 +12,9 @@
  */
 
 #include "attribute.h"
+#include <sstream>
 
 Attribute::Attribute() {
-}
-
-Attribute::Attribute(const Attribute& orig) {
 }
 
 Attribute::Attribute(const std::string &name, int value) :
@@ -32,5 +30,11 @@ int Attribute::value() const {
 
 std::string Attribute::name() const {
     return _name;
+}
+
+std::string Attribute::toString() const {
+    std::ostringstream sStream;
+    sStream << "Attribute#" << this << "(name: " << _name << ", value: " << _intValue << ")";
+    return sStream.str();
 }
 

@@ -16,7 +16,9 @@
 
 #include <string>
 
-class Attribute {
+#include "printable.h"
+
+class Attribute : public Printable {
 public:
     enum ValueType {
         Unknown = 0,
@@ -24,13 +26,14 @@ public:
         String
     };
     Attribute();
-    Attribute(const Attribute& orig);
     Attribute(const std::string &name, int value);
     // Attribute(const std::string &name, const std::string &value);
     virtual ~Attribute();
     
     int value() const;
     std::string name() const;
+
+    std::string toString() const;
 
 private:
     std::string _name;

@@ -16,15 +16,12 @@ int main(int argc, char *argv[]) {
             Parser::Token tok = parser.nextToken(it, end);
             if (tok == Parser::TOK_IDENT) {
                 std::cout << "node: " << parser.lastIdentifier() << std::endl;
-            } else if (tok == Parser::TOK_ATTR_OPEN) {
-                std::unique_ptr<Attribute> attr = parser.parseAttribute(it, end);
-                if (!attr) {
-                    std::cout << "Error: unable to parse attribute" << std::endl;
-                    continue;
+
+                auto attributes = parser.parseAttributes(it, end);
+                for (auto attr : attributes) {
+                    std::cout << attr->toString();
                 }
-                std::cout << "Parsed attribute: (name: " << attr->name() << ", value: " << attr->value() << ")" << std::endl;
-            } else if (tok == Parser::TOK_ATTR_CLOSE) {
-                std::cout << "attr end;" << std::endl;
+                
             } else if (tok == Parser::TOK_LIT) {
                 std::cout << "Literal: \"" << parser.lastLiteral() << "\"" << std::endl;
             } else if (tok == Parser::TOK_EOL) {
