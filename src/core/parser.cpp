@@ -124,23 +124,24 @@ std::set<std::shared_ptr<Attribute>> Parser::parseAttributes(StrIterator &it, St
     Token tok = nextToken(it, end);
     if (tok != TOK_ATTR_OPEN) {
         std::cerr << "Syntax: got " << tok << " but expected {" << std::endl;
-        return decltype(Parser::parseAttributes(it, end))();
+        return std::set<std::shared_ptr<Attribute>>();
     }    
-    auto attributes = decltype(Parser::parseAttributes(it, end))();
+    auto attributes = std::set<std::shared_ptr<Attribute>>();
 
     while (true) {
+        auto attr = parseAttribute(it, end);
+        if (!attr) {
+            return std::set<std::shared_ptr<Attribute>>();
+        }
+        attributes.insert(attr);
+
         tok = nextToken(it, end);
         if (tok == TOK_EOL) {
             std::cerr << "Syntax: unexpected end of input: expected }" << std::endl;
-            return decltype(Parser::parseAttributes(it, end))();
+            return std::set<std::shared_ptr<Attribute>>();
         } else if (tok == TOK_ATTR_CLOSE) {
             return attributes;
         } else if (tok == TOK_COMMA) {
-            auto attr = parseAttribute(it, end);
-            if (!attr) {
-                return decltype(Parser::parseAttributes(it, end))();
-            }
-            attributes.insert(attr);
             continue;
         }
     }
