@@ -21,3 +21,4 @@ private:
 };
 
 #endif // UI_ELEMENT_H
+

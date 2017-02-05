@@ -1,0 +1,26 @@
+decl Message {
+	body : string
+	sender : string
+}
+
+decl MessageView as Element {
+	messages : array[Message]
+	input : string
+
+	fn render() -> ui {
+	    List{
+	    	values: messages
+	    }
+	    Input{
+	    	value: input
+	    }
+	    Button :: submit {
+	    	text: "Send"
+	    }
+	}
+
+	fn submit(event: event) {
+		var m = Message(body: input, sender: "myself")
+		messages.append(m)
+	}
+}

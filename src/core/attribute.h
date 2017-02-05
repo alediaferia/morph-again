@@ -25,13 +25,17 @@ public:
         Integer,
         String
     };
+
     Attribute();
     Attribute(const std::string &name, int value);
-    // Attribute(const std::string &name, const std::string &value);
+    Attribute(const std::string &name, const std::string &value);
     virtual ~Attribute();
-    
-    int value() const;
+
+    int intValue() const;
+    std::string stringValue() const;
+
     std::string name() const;
+    ValueType valueType() const;
 
     std::string toString() const;
 
@@ -39,6 +43,7 @@ private:
     std::string _name;
     std::string _stringValue;
     int _intValue;
+    ValueType _valueType;
 };
 
 #endif /* ATTRIBUTE_H */

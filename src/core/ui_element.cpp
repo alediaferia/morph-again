@@ -9,3 +9,7 @@ UiElement::UiElement(std::weak_ptr<UiElement> parent) : UiElement() {
 std::string UiElement::toString() const {
     return std::sprintf("UiElement(%x)", this);
 }
+
+void UiElement::setName(const std::string &name) {
+
+}
