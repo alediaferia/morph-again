@@ -3,6 +3,7 @@
 //
 
 #include "num.h"
+#include <sstream>
 
 Num::Num(int value) : Token(Token::NUM),
   _value(value)
@@ -11,6 +12,7 @@ Num::Num(int value) : Token(Token::NUM),
 Num::~Num() {}
 
 std::string Num::toString() const {
-    static std::string str = std::to_string(_value);
-    return str;
+    std::ostringstream ss;
+    ss << "Num( " << _value << " )";
+    return ss.str();
 }

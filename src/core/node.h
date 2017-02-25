@@ -13,6 +13,8 @@ public:
 
     std::string emitLabel(int index);
     std::string emit(const std::string &str);
+
+    virtual std::string toString() const;
 };
 
 

@@ -9,10 +9,10 @@
 
 class Id : public Expr {
 public:
-    Id(std::shared_ptr<Word> id, std::shared_ptr<Type> t, int bytes);
+    Id(std::shared_ptr<Word> id, std::shared_ptr<Type> t);
 
+    std::string toString() const override;
 private:
-    int _offset;
 };
 
 

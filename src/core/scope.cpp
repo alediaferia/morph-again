@@ -8,7 +8,7 @@ Scope::Scope() {
 
 }
 
-Scope::Scope(std::weak_ptr<Scope> parent) : _parent(parent) {
+Scope::Scope(std::shared_ptr<Scope> parent) : _parent(parent) {
 
 }
 
@@ -23,10 +23,15 @@ std::shared_ptr<Id> Scope::get(std::shared_ptr<Token> tok) {
         if (it != scope->_symbols.end()) {
             return it->second;
         }
-        auto p = scope->_parent.lock();
-        if (!p) {
+        if (!scope->_parent) {
             return nullptr;
         }
-        scope = p.get();
+        scope = scope->_parent.get();
     }
+
+    return nullptr;
+}
+
+std::shared_ptr<Scope> Scope::parent() const {
+    return _parent;
 }

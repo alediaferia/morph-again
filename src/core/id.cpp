@@ -3,8 +3,14 @@
 //
 
 #include "id.h"
+#include <sstream>
 
-Id::Id(std::shared_ptr<Word> id, std::shared_ptr<Type> t, int bytes) : Expr(id, t),
-    _offset(bytes) {
+Id::Id(std::shared_ptr<Word> id, std::shared_ptr<Type> t) : Expr(id, t) {
 
+}
+
+std::string Id::toString() const {
+    std::ostringstream ss;
+    ss << "Id(" << token()->toString() << "<" << type() ->toString() << ">)";
+    return ss.str();
 }

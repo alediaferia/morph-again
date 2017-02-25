@@ -1,0 +1,4 @@
+-DDEBUG
+-I/usr/include/c++/5/
+-I./src/
+-I./src/core/

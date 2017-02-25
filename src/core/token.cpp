@@ -44,7 +44,7 @@ Token::Token(char c) :
 
 Token::~Token() {}
 
-Tag Token::tag() const {
+Token::Tag Token::tag() const {
     return _tag;
 }
 

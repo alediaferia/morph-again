@@ -12,14 +12,15 @@
 class Scope {
 public:
     Scope();
-    Scope(std::weak_ptr<Scope> parent);
-    ~Scope();
+    Scope(std::shared_ptr<Scope> parent);
 
     void put(std::shared_ptr<Token> tok, std::shared_ptr<Id> id);
     std::shared_ptr<Id> get(std::shared_ptr<Token>);
+
+    std::shared_ptr<Scope> parent() const;
 private:
     std::map<std::shared_ptr<Token>, std::shared_ptr<Id>> _symbols;
-    std::weak_ptr<Scope> _parent;
+    std::shared_ptr<Scope> _parent;
 };
 
 

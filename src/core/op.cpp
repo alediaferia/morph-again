@@ -3,13 +3,6 @@
 //
 
 #include "op.h"
-#include "temp.h"
 
-Expr *Op::reduce() {
-    Expr *expr = gen();
-    Temp *t = new Temp(type());
-
-    // TODO emit assignment
-    // temp = expr(x) (e.g. t1 = 1 + 4)
-    return t;
-}
+Op::Op(std::shared_ptr<Token> tok, std::shared_ptr<Type> type) : Expr(tok, type)
+{}

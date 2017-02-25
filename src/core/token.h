@@ -28,7 +28,8 @@ public:
         LE,
         NE,
         BASIC,
-        INDEX
+        INDEX,
+        VAR
     };
 
     Token();

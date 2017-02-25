@@ -11,9 +11,7 @@
 class Op : public Expr {
 public:
     Op(std::shared_ptr<Token> tok, std::shared_ptr<Type> type);
-
-    virtual Expr* reduce() override;
 };
 
 
-#endif //MORPH_AGAIN_OP_H
+#endif // OP_H

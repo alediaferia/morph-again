@@ -3,6 +3,7 @@
 //
 
 #include "lexer.h"
+#include "type.h"
 #include "num.h"
 
 Lexer::Lexer() :
@@ -15,12 +16,13 @@ Lexer::Lexer() :
     reserve(Word::Return->toString(), Word::Return);
     reserve(Word::True->toString(), Word::True);
     reserve(Word::False->toString(), Word::False);
-    reserve(Word::Int->toString(), Word::Int);
-    reserve(Word::Bool->toString(), Word::Bool);
+    reserve(Type::Bool->toString(), Type::Bool);
+    reserve(Type::Int->toString(), Type::Int);
+    reserve(Type::Char->toString(), Type::Char);
 }
 
 void Lexer::reserve(const std::string &str, std::shared_ptr<Token> token) {
-    _words.insert(str, token);
+    _words[str] = token;
 }
 
 void Lexer::readNext() {

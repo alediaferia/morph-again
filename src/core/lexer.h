@@ -12,9 +12,9 @@
 class Lexer {
 public:
     Lexer();
-    ~Lexer();
 
-    void setSource(const std::string::const_iterator &it, const std::string::const_iterator &end);
+    void setSource(const std::string::const_iterator &it,
+                    const std::string::const_iterator &end);
 
     std::shared_ptr<Token> scan();
 
@@ -33,4 +33,4 @@ private:
 };
 
 
-#endif //MORPH_AGAIN_LEXER_H
+#endif // LEXER_H

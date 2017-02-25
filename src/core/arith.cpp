@@ -18,13 +18,9 @@ _expr2(x2) {
     }
 }
 
-Expr* Arith::gen() {
-    return new Arith(token(), _expr1->reduce(), _expr2->reduce());
-}
-
 std::string Arith::toString() const {
     std::ostringstream ss;
-    ss << _expr1->toString() << token()->toString() << _expr2->toString();
+    ss << "Arith("  << _expr1->toString() << " " << token()->toString() << " " << _expr2->toString() << ")";
 
     return ss.str();
 }

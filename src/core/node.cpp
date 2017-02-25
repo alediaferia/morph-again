@@ -7,3 +7,7 @@
 Node::Node() {
 
 }
+
+std::string Node::toString() const {
+    return "<node>";
+}

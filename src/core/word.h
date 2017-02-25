@@ -19,14 +19,12 @@ public:
     static std::shared_ptr<Word> Return;
     static std::shared_ptr<Word> True;
     static std::shared_ptr<Word> False;
-    static std::shared_ptr<Word> Int;
-    static std::shared_ptr<Word> Bool;
     static std::shared_ptr<Word> Eq;
     static std::shared_ptr<Word> Ge;
     static std::shared_ptr<Word> Le;
     static std::shared_ptr<Word> Ne;
 
-    virtual std::string toString() const;
+    virtual std::string toString() const override;
 
 private:
     std::string _lexeme;

@@ -7,10 +7,10 @@
 std::shared_ptr<Type> Type::Int = std::shared_ptr<Type>(new Type("int", Token::BASIC, 4));
 std::shared_ptr<Type> Type::Float = std::shared_ptr<Type>(new Type("float", Token::BASIC, 8));
 std::shared_ptr<Type> Type::Char = std::shared_ptr<Type>(new Type("char", Token::BASIC, 1));
-std::shared_ptr<Type> Type::Bool = std::shared_ptr<Type>(new Type("bool", Token::BASIC, 1)));
+std::shared_ptr<Type> Type::Bool = std::shared_ptr<Type>(new Type("bool", Token::BASIC, 1));
 
-Type::Type(const std::string &s, Token::Tag tag, int w) : Word(s, tag) : _width(w) {
-
+Type::Type(const std::string &s, Token::Tag tag, int w) : Word(s, tag),
+ _width(w) {
 }
 
 int Type::width() const {
