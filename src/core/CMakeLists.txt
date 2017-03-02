@@ -19,6 +19,7 @@ scope.cpp
 assign.cpp
 constant.cpp
 stmt.cpp
+strlit.cpp
 )
 
 add_library(morphcore STATIC ${sources})

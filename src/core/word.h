@@ -31,4 +31,4 @@ private:
 };
 
 
-#endif //MORPH_AGAIN_WORD_H
+#endif // WORD_H

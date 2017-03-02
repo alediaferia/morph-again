@@ -13,7 +13,7 @@ std::string Array::toString() const {
     // <type>[ size ]
 
     std::ostringstream os;
-    os << _of->toString() << "[ " << width() << "]";
+    os << _of->toString() << "[ " << width() << " ]";
 
     return os.str();
 }

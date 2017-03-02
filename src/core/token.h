@@ -29,7 +29,8 @@ public:
         NE,
         BASIC,
         INDEX,
-        VAR
+        VAR,
+        STRLIT
     };
 
     Token();

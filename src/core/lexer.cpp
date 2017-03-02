@@ -5,6 +5,7 @@
 #include "lexer.h"
 #include "type.h"
 #include "num.h"
+#include "strlit.h"
 
 Lexer::Lexer() :
     _peek(' '),
@@ -104,7 +105,6 @@ std::shared_ptr<Token> Lexer::scan() {
         // implement Real support
     }
 
-
     if (std::isalpha(_peek)) {
         std::string buf;
         do {
@@ -119,6 +119,16 @@ std::shared_ptr<Token> Lexer::scan() {
         }
 
         return reserved;
+    }
+
+    if (_peek == '"') {
+        std::string buf;
+        do {
+            buf += _peek;
+            readNext();
+        } while(_peek != '"');
+        _peek = ' ';
+        return std::make_shared<StrLit>(buf);
     }
 
     auto t = std::make_shared<Token>(_peek);

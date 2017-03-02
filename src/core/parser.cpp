@@ -3,6 +3,8 @@
 #include "constant.h"
 #include "assign.h"
 #include "arith.h"
+#include "strlit.h"
+#include "array.h"
 
 #include <sstream>
 #include <iostream>
@@ -165,6 +167,13 @@ std::shared_ptr<Expr> Parser::factor() {
         expr = std::make_shared<Constant>(_token, Type::Int);
         next();
         break;
+    case Token::STRLIT:
+    {
+        auto strlit = std::static_pointer_cast<StrLit>(_token);
+        expr = std::make_shared<Constant>(_token, std::make_shared<Array>(strlit->length(), Type::Char));
+        next();
+        break;
+    }
     case Token::ID:
     {
         auto word = std::dynamic_pointer_cast<Word>(_token);
