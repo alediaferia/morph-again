@@ -122,6 +122,7 @@ std::shared_ptr<Token> Lexer::scan() {
     }
 
     if (_peek == '"') {
+        readNext();
         std::string buf;
         do {
             buf += _peek;
