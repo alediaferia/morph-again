@@ -19,13 +19,25 @@ Attribute::Attribute() {
 
 Attribute::Attribute(const std::string &name, int value) :
     _name(name),
-    _intValue(value) {}
+    _intValue(value),
+    _valueType(Integer)
+{}
+
+Attribute::Attribute(const std::string &name, const std::string &value) :
+    _name(name),
+    _stringValue(value),
+    _valueType(String)
+{}
 
 Attribute::~Attribute() {
 }
 
-int Attribute::value() const {
+int Attribute::intValue() const {
     return _intValue;
+}
+
+std::string Attribute::stringValue() const {
+    return _stringValue;
 }
 
 std::string Attribute::name() const {
@@ -34,7 +46,11 @@ std::string Attribute::name() const {
 
 std::string Attribute::toString() const {
     std::ostringstream sStream;
-    sStream << "Attribute#" << this << "(name: " << _name << ", value: " << _intValue << ")";
+    if (_valueType == Integer)
+        sStream << "Attribute#" << this << "(name: " << _name << ", value: " << _intValue << ")";
+    else if (_valueType == String)
+        sStream << "Attribute#" << this << "(name: " << _name << ", value: \"" << _stringValue << "\")";
+
     return sStream.str();
 }
 

@@ -1,45 +1,52 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <string>
-#include <memory>
-#include <set>
+#include "lexer.h"
+#include "token.h"
+#include "scope.h"
+#include "stmt.h"
 
-class Attribute;
+#include <memory>
 
 class Parser {
 public:
-    typedef std::string::const_iterator StrIterator;
-    enum Token {
-        TOK_IDENT,
-        TOK_ATTR_OPEN,
-        TOK_ATTR_CLOSE,
-        TOK_ATTR_SEP,
-        TOK_INDENT,
-        TOK_NUM, // number (int)
-        TOK_LIT, // literal
-    	TOK_COMMA,
-        TOK_EOL,
-        TOK_UNKNOWN
-    };
-    Parser();
+    Parser(std::unique_ptr<Lexer> lexer);
 
-    std::string lastIdentifier() const;
-    std::string lastLiteral() const;
+    void setInput(const std::string &input);
 
-    Token nextToken(StrIterator &it,
-                    StrIterator &end);
-    std::shared_ptr<Attribute> parseAttribute(StrIterator &it,
-		    			      StrIterator &end);
-    std::set<std::shared_ptr<Attribute>> parseAttributes(StrIterator &it,
-		    					StrIterator &end);
+    // main
+    std::shared_ptr<Node> program(bool newScope = true);
+
 protected:
+    // error reporting
+    inline void error(const std::string &err);
+    inline void undeclIdError(const std::string &id);
+    inline void syntaxError(const std::string &err);
+
+    // parsing
+    void next();
+    bool match(char c);
+    bool match(Token::Tag);
+
+    // lang
+    std::shared_ptr<Expr> parenExpr();
+    std::shared_ptr<Expr> expr();
+    std::shared_ptr<Expr> term();
+    std::shared_ptr<Expr> factor();
+
+    std::shared_ptr<Type> type();
+    std::shared_ptr<Node> decl();
+
+    std::shared_ptr<Stmt> assign();
+    std::shared_ptr<Stmt> assignTo(std::shared_ptr<Id> id);
 
 private:
-    std::string _currentIdentifier;
-    std::string _currentLiteral;
-    int _currentNum;
-    int _lastChar;
+    std::shared_ptr<Scope> _scope;
+    std::unique_ptr<Lexer> _lexer;
+    std::shared_ptr<Token> _token;
+
+private:
+    inline void failedMatch(std::string arg);
 };
 
 #endif // PARSER_H
