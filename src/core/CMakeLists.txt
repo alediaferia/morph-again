@@ -20,6 +20,10 @@ assign.cpp
 constant.cpp
 stmt.cpp
 strlit.cpp
+seq.cpp
+decl.cpp
+fn.cpp
+ret.cpp
 )
 
 add_library(morphcore STATIC ${sources})

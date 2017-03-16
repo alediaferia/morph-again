@@ -30,7 +30,8 @@ public:
         BASIC,
         INDEX,
         VAR,
-        STRLIT
+        STRLIT,
+        FN
     };
 
     Token();

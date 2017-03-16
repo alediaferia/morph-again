@@ -20,6 +20,7 @@ Lexer::Lexer() :
     reserve(Type::Bool->toString(), Type::Bool);
     reserve(Type::Int->toString(), Type::Int);
     reserve(Type::Char->toString(), Type::Char);
+    reserve(Word::Fn->toString(), Word::Fn);
 }
 
 void Lexer::reserve(const std::string &str, std::shared_ptr<Token> token) {
@@ -43,6 +44,10 @@ bool Lexer::expect(char c) {
 
     _peek = ' ';
     return true;
+}
+
+bool Lexer::eof() const {
+    return _it == _end;
 }
 
 std::shared_ptr<Token> Lexer::scan() {
@@ -117,7 +122,6 @@ std::shared_ptr<Token> Lexer::scan() {
             reserved = std::make_shared<Word>(buf, Token::ID);
             _words[buf] = reserved;
         }
-
         return reserved;
     }
 

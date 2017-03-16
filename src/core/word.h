@@ -23,6 +23,7 @@ public:
     static std::shared_ptr<Word> Ge;
     static std::shared_ptr<Word> Le;
     static std::shared_ptr<Word> Ne;
+    static std::shared_ptr<Word> Fn;
 
     virtual std::string toString() const override;
 

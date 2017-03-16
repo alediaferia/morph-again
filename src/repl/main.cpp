@@ -12,10 +12,12 @@ int main(int argc, char *argv[]) {
     Parser parser(std::move(lexer));
     while (true) {
         std::string input;
+
+        std::cout << "sand#> ";
         std::getline(std::cin, input);
         parser.setInput(input);
 
-        std::cout << parser.program(false)->toString() << std::endl;
+        std::cout << std::endl << "~> " << parser.program(false)->toString() << std::endl;
     }
 
     return 0;

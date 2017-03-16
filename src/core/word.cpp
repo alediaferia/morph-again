@@ -14,6 +14,7 @@ std::shared_ptr<Word> Word::Eq(new Word("eq", Token::EQ));
 std::shared_ptr<Word> Word::Ge(new Word("ge", Token::GE));
 std::shared_ptr<Word> Word::Le(new Word("le", Token::LE));
 std::shared_ptr<Word> Word::Ne(new Word("ne", Token::NE));
+std::shared_ptr<Word> Word::Fn(new Word("fn", Token::FN));
 
 Word::Word(const std::string &s, Token::Tag tag) : Token(tag),
 _lexeme(s) {

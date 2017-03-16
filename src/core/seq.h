@@ -8,7 +8,9 @@ public:
     Seq(std::shared_ptr<Stmt> s1, std::shared_ptr<Stmt> s2);
 
     std::shared_ptr<Stmt> stmt1() const;
-    std::shared_ptr<Stmt> stmt2() const
+    std::shared_ptr<Stmt> stmt2() const;
+
+    std::string toString() const override;
 private:
     std::shared_ptr<Stmt> _s1;
     std::shared_ptr<Stmt> _s2;

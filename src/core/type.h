@@ -18,6 +18,7 @@ public:
     static std::shared_ptr<Type> Float;
     static std::shared_ptr<Type> Char;
     static std::shared_ptr<Type> Bool;
+    static std::shared_ptr<Type> Void;
 
     static std::shared_ptr<Type> max(std::shared_ptr<Type> t1, std::shared_ptr<Type> t2);
     static bool isNumeric(std::shared_ptr<Type> t);

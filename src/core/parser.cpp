@@ -5,6 +5,7 @@
 #include "arith.h"
 #include "strlit.h"
 #include "array.h"
+#include "seq.h"
 
 #include <sstream>
 #include <iostream>
@@ -60,7 +61,7 @@ bool Parser::match(Token::Tag tag) {
 bool Parser::match(char c) {
     if (**_token != c) {
         std::ostringstream ss;
-        ss << "Unexpected token '" << **_token << "' (expected '" << c << "')" << std::endl;
+        ss << "Unexpected token '" << **_token << "' (" << _token->tag() << ")" << " (expected '" << c << "')" << std::endl;
         syntaxError(ss.str());
         return false;
     }
@@ -75,11 +76,7 @@ std::shared_ptr<Node> Parser::program(bool newScope) {
     if (newScope) // pushing a new scope
         _scope = std::make_shared<Scope>(_scope);
 
-    std::shared_ptr<Node> node_;
-    if (_token->tag() == Token::BASIC)
-        node_ = decl();
-    else
-        node_ = expr();
+    std::shared_ptr<Node> node_ = std::static_pointer_cast<Node>(stmts());
 
     if (newScope) // popping scope
         _scope = _scope->parent();
@@ -104,24 +101,24 @@ std::shared_ptr<Node> Parser::program(bool newScope) {
 //     _scope = _scope->parent();
 // }
 
-// <decl> ::= (<basic-type> <id> [=<expr>] ';')*
-std::shared_ptr<Node> Parser::decl() {
+// <decl> ::= <basic-type> <id> [=<expr>]
+std::shared_ptr<Stmt> Parser::decl() {
     if (_token->tag() == Token::BASIC) {
-        std::shared_ptr<Type> t = type(); 
-        std::shared_ptr<Token> tok = _token;
-        TRY_MATCH_ELSE(Token::ID, nullptr);
-        auto id = std::make_shared<Id>(std::static_pointer_cast<Word>(tok), t);
-        std::shared_ptr<Node> node_;
+        std::shared_ptr<Stmt> stmt;
+        auto id_ = id();
+        std::shared_ptr<Decl> decl_ = std::make_shared<Decl>(id_);
         if (**_token == '=') { // inline assignment
-            node_ = assignTo(id);
+            auto assign = assignTo(id_);
+            stmt = std::make_shared<Seq>(decl_, assign);
         } else {
-            node_ = id;
+            stmt = decl_;
         }
 
-        TRY_MATCH_ELSE((char)';', nullptr);
-        _scope->put(tok, id);
+        _scope->put(id_->token(), id_);
 
-        return node_;
+        return stmt;
+    } else if (_token->tag() == Token::FN) {
+        return fn();
     }
 
     std::ostringstream ss;
@@ -176,7 +173,7 @@ std::shared_ptr<Expr> Parser::factor() {
     }
     case Token::ID:
     {
-        auto word = std::dynamic_pointer_cast<Word>(_token);
+        auto word = std::static_pointer_cast<Word>(_token);
         auto identifier = word->toString();
         auto id = _scope->get(_token);
         if (!id) {
@@ -221,6 +218,21 @@ std::shared_ptr<Expr> Parser::expr() {
     return term_;
 }
 
+// <stmt> ::= (<decl> | <ret>) ';'
+std::shared_ptr<Stmt> Parser::stmt() {
+    std::shared_ptr<Stmt> node_;
+    if (_token->tag() == Token::BASIC || _token->tag() == Token::FN) 
+        node_ = decl();
+    else if (_token->tag() == Token::RETURN)
+        node_ = ret();
+    else
+        return Stmt::Null;
+
+    TRY_MATCH_ELSE(';', nullptr);
+
+    return node_;
+}
+
 // <term> ::= <factor> ('*'|'/') <factor>
 std::shared_ptr<Expr> Parser::term() {
     auto factor_ = factor();
@@ -231,4 +243,71 @@ std::shared_ptr<Expr> Parser::term() {
     }
 
     return factor_;
+}
+
+// <fn> ::= 'fn' <identifier> '(' (<arg>[,<arg>])* ')' <block>
+std::shared_ptr<Fn> Parser::fn() {
+    TRY_MATCH_ELSE(Token::FN, nullptr);
+
+    std::shared_ptr<Token> tok = _token;
+    TRY_MATCH_ELSE(Token::ID, nullptr);
+    auto fnId = std::static_pointer_cast<Word>(tok);
+
+    TRY_MATCH_ELSE('(', nullptr);
+    std::vector<std::shared_ptr<Id>> args;
+    std::shared_ptr<Scope> fnScope = std::make_shared<Scope>(_scope);
+
+    while (**_token != ')') {
+        auto id_ = id();
+        fnScope->put(id_->token(), id_);
+        args.push_back(id_);
+        if (**_token != ',')
+            break;
+    }
+    TRY_MATCH_ELSE(')', nullptr);
+
+    auto seq = block(fnScope);
+
+    return std::make_shared<Fn>(fnId->toString(), Type::Void, args, std::static_pointer_cast<Seq>(seq));
+}
+
+std::shared_ptr<Id> Parser::id() {
+    std::shared_ptr<Type> t = type();
+    std::shared_ptr<Token> tok = _token;
+    TRY_MATCH_ELSE(Token::ID, nullptr);
+    return std::make_shared<Id>(std::static_pointer_cast<Word>(tok), t);
+}
+
+// <stmts> ::= <stmt>+
+std::shared_ptr<Seq> Parser::stmts() {
+    std::shared_ptr<Seq> seq_;
+    auto stmt_ = stmt();
+    if (stmt_ == Stmt::Null) {
+        return std::make_shared<Seq>(stmt_, Stmt::Null);
+    } else {
+        return std::make_shared<Seq>(stmt_, stmts());
+    }
+}
+
+// <block> ::= '{' <stmts> '}'
+std::shared_ptr<Stmt> Parser::block(std::shared_ptr<Scope> scope) {
+    TRY_MATCH_ELSE('{', nullptr)
+
+    auto prevScope = _scope;
+    if (scope)
+        _scope = scope;
+
+    auto block = stmts();
+    _scope = prevScope;
+
+    TRY_MATCH_ELSE('}', nullptr)
+
+    return block;
+}
+
+// <return> ::= 'return' <expr>
+std::shared_ptr<Ret> Parser::ret() {
+    TRY_MATCH_ELSE(Token::RETURN, nullptr);
+
+    return std::make_shared<Ret>(expr());
 }

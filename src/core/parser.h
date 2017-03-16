@@ -5,6 +5,10 @@
 #include "token.h"
 #include "scope.h"
 #include "stmt.h"
+#include "decl.h"
+#include "fn.h"
+#include "ret.h"
+#include "seq.h"
 
 #include <memory>
 
@@ -32,10 +36,16 @@ protected:
     std::shared_ptr<Expr> parenExpr();
     std::shared_ptr<Expr> expr();
     std::shared_ptr<Expr> term();
+    std::shared_ptr<Stmt> stmt();
     std::shared_ptr<Expr> factor();
+    std::shared_ptr<Ret> ret();
+    std::shared_ptr<Seq> stmts();
 
     std::shared_ptr<Type> type();
-    std::shared_ptr<Node> decl();
+    std::shared_ptr<Id> id();
+    std::shared_ptr<Stmt> decl();
+    std::shared_ptr<Fn> fn();
+    std::shared_ptr<Stmt> block(std::shared_ptr<Scope> scope);
 
     std::shared_ptr<Stmt> assign();
     std::shared_ptr<Stmt> assignTo(std::shared_ptr<Id> id);

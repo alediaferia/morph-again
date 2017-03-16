@@ -8,6 +8,7 @@ std::shared_ptr<Type> Type::Int = std::shared_ptr<Type>(new Type("int", Token::B
 std::shared_ptr<Type> Type::Float = std::shared_ptr<Type>(new Type("float", Token::BASIC, 8));
 std::shared_ptr<Type> Type::Char = std::shared_ptr<Type>(new Type("char", Token::BASIC, 1));
 std::shared_ptr<Type> Type::Bool = std::shared_ptr<Type>(new Type("bool", Token::BASIC, 1));
+std::shared_ptr<Type> Type::Void = std::shared_ptr<Type>(new Type("void", Token::BASIC, 0));
 
 Type::Type(const std::string &s, Token::Tag tag, int w) : Word(s, tag),
  _width(w) {

@@ -20,6 +20,8 @@ public:
 
     void reserve(const std::string &str, std::shared_ptr<Token> token);
 
+    bool eof() const;
+
 protected:
     void readNext();
     bool expect(char c);

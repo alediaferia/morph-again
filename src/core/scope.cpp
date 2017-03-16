@@ -35,3 +35,7 @@ std::shared_ptr<Id> Scope::get(std::shared_ptr<Token> tok) {
 std::shared_ptr<Scope> Scope::parent() const {
     return _parent;
 }
+
+void Scope::setParent(std::shared_ptr<Scope> scope) {
+    _parent = scope;
+}
