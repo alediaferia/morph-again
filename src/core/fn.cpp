@@ -2,10 +2,9 @@
 
 #include <sstream>
 
-Fn::Fn(const std::string &identifier,
+Fn::Fn(std::shared_ptr<Word> id,
 	   const std::shared_ptr<Type> ret,
-	   std::vector<std::shared_ptr<Id>> args, std::shared_ptr<Seq> seq) : Stmt(),
-    _identifier(identifier),
+	   std::vector<std::shared_ptr<Id>> args, std::shared_ptr<Seq> seq) : Id(id, Type::Fn),
     _ret(ret),
     _args(args),
     _seq(seq)
@@ -13,7 +12,7 @@ Fn::Fn(const std::string &identifier,
 
 std::string Fn::toString() const {
 	std::ostringstream ss;
-	ss  << "fn " << _identifier << "(" <<_ret->toString() << ")" << "(";
+	ss  << "fn " << id()->toString() << "(" <<_ret->toString() << ")" << "(";
 	for (int i = 0; i < _args.size(); i++) {
 		ss << _args[i]->toString() << ", ";
 	}

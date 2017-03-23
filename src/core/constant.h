@@ -4,6 +4,7 @@
 #include "expr.h"
 #include "token.h"
 #include "type.h"
+#include "value.h"
 
 class Constant : public Expr {
 public:
@@ -11,5 +12,7 @@ public:
     Constant(int i);
 
     std::string toString() const override;
+
+    Value toValue() const override;
 };
 #endif // CONSTANT_H

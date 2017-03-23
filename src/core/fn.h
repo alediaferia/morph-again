@@ -1,7 +1,7 @@
 #ifndef FN_H
 #define FN_H
 
-#include "stmt.h"
+#include "expr.h"
 #include "type.h"
 #include "id.h"
 #include "seq.h"
@@ -9,16 +9,16 @@
 #include <string>
 #include <vector>
 
-class Fn : public Stmt {
+class Fn : public Id {
 public:
-	Fn(const std::string &identifier,
+	Fn(std::shared_ptr<Word> id,
 	   const std::shared_ptr<Type> ret,
-	   std::vector<std::shared_ptr<Id>> args, std::shared_ptr<Seq> seq);
+	   std::vector<std::shared_ptr<Id>> args,
+       std::shared_ptr<Seq> seq);
 
 	virtual std::string toString() const override;
 
 private:
-	std::string _identifier;
 	std::shared_ptr<Type> _ret;
 	std::vector<std::shared_ptr<Id>> _args;
 	std::shared_ptr<Seq> _seq;

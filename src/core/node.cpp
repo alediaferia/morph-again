@@ -11,3 +11,7 @@ Node::Node() {
 std::string Node::toString() const {
     return "<node>";
 }
+
+Value Node::toValue() const {
+    return Value();
+}

@@ -14,3 +14,10 @@ std::string Constant::toString() const {
     ss << "Const " << token()->toString() << "<" << type()->toString() << ">)";
     return ss.str();
 }
+
+Value Constant::toValue() const {
+    std::ostringstream ss;
+    ss << "$" << token()->toString();
+
+    return ss.str();
+}

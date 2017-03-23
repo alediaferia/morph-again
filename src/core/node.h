@@ -7,6 +7,8 @@
 
 #include <string>
 
+#include "value.h"
+
 class Node {
 public:
     Node();
@@ -15,6 +17,8 @@ public:
     std::string emit(const std::string &str);
 
     virtual std::string toString() const;
+
+    virtual Value toValue() const;
 };
 
 

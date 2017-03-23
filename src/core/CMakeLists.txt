@@ -21,9 +21,9 @@ constant.cpp
 stmt.cpp
 strlit.cpp
 seq.cpp
-decl.cpp
 fn.cpp
 ret.cpp
+exprstmt.cpp
 )
 
 add_library(morphcore STATIC ${sources})

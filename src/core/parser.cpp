@@ -6,6 +6,7 @@
 #include "strlit.h"
 #include "array.h"
 #include "seq.h"
+#include "exprstmt.h"
 
 #include <sstream>
 #include <iostream>
@@ -76,10 +77,16 @@ std::shared_ptr<Node> Parser::program(bool newScope) {
     if (newScope) // pushing a new scope
         _scope = std::make_shared<Scope>(_scope);
 
-    std::shared_ptr<Node> node_ = std::static_pointer_cast<Node>(stmts());
+    auto stmts_ = stmts();
+    std::shared_ptr<Node> node_;
+    if (!stmts_)
+        node_ = Stmt::Null;
+    else
+        node_ = std::static_pointer_cast<Node>(stmts());
 
     if (newScope) // popping scope
         _scope = _scope->parent();
+
     return node_;
 }
 
@@ -106,19 +113,19 @@ std::shared_ptr<Stmt> Parser::decl() {
     if (_token->tag() == Token::BASIC) {
         std::shared_ptr<Stmt> stmt;
         auto id_ = id();
-        std::shared_ptr<Decl> decl_ = std::make_shared<Decl>(id_);
+        auto idStmt = std::make_shared<ExprStmt>(id_);
         if (**_token == '=') { // inline assignment
             auto assign = assignTo(id_);
-            stmt = std::make_shared<Seq>(decl_, assign);
+            stmt = std::make_shared<Seq>(idStmt, assign);    
         } else {
-            stmt = decl_;
+            stmt = idStmt;
         }
 
         _scope->put(id_->token(), id_);
 
         return stmt;
     } else if (_token->tag() == Token::FN) {
-        return fn();
+        return std::make_shared<ExprStmt>(fn());
     }
 
     std::ostringstream ss;
@@ -253,6 +260,12 @@ std::shared_ptr<Fn> Parser::fn() {
     TRY_MATCH_ELSE(Token::ID, nullptr);
     auto fnId = std::static_pointer_cast<Word>(tok);
 
+    auto reserved = _scope->get(fnId);
+    if (reserved) {
+        error("Cannot redefine symbol");
+        return nullptr;
+    }
+
     TRY_MATCH_ELSE('(', nullptr);
     std::vector<std::shared_ptr<Id>> args;
     std::shared_ptr<Scope> fnScope = std::make_shared<Scope>(_scope);
@@ -268,7 +281,10 @@ std::shared_ptr<Fn> Parser::fn() {
 
     auto seq = block(fnScope);
 
-    return std::make_shared<Fn>(fnId->toString(), Type::Void, args, std::static_pointer_cast<Seq>(seq));
+    auto fn = std::make_shared<Fn>(fnId, Type::Void, args, std::static_pointer_cast<Seq>(seq));
+    _scope->put(fnId, fn);
+
+    return fn;
 }
 
 std::shared_ptr<Id> Parser::id() {

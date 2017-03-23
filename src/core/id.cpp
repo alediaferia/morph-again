@@ -14,3 +14,7 @@ std::string Id::toString() const {
     ss << "Id(" << token()->toString() << "<" << type() ->toString() << ">)";
     return ss.str();
 }
+
+std::shared_ptr<Word> Id::id() const {
+    return std::static_pointer_cast<Word>(token());
+}

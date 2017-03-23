@@ -5,7 +5,6 @@
 #include "token.h"
 #include "scope.h"
 #include "stmt.h"
-#include "decl.h"
 #include "fn.h"
 #include "ret.h"
 #include "seq.h"

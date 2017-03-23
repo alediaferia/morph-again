@@ -12,6 +12,8 @@ public:
     Id(std::shared_ptr<Word> id, std::shared_ptr<Type> t);
 
     std::string toString() const override;
+
+    std::shared_ptr<Word> id() const;
 private:
 };
 

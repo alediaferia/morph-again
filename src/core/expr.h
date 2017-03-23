@@ -9,6 +9,7 @@
 #include "token.h"
 #include "type.h"
 
+// an expression is evaluated
 class Expr : public Node {
 public:
     Expr(std::shared_ptr<Token> tok, std::shared_ptr<Type> t);

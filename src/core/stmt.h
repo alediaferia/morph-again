@@ -4,6 +4,7 @@
 #include "node.h"
 #include <memory>
 
+// A statement is executed
 class Stmt : public Node {
 public:
     static std::shared_ptr<Stmt> Null;
