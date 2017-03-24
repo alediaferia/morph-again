@@ -82,7 +82,7 @@ std::shared_ptr<Node> Parser::program(bool newScope) {
     if (!stmts_)
         node_ = Stmt::Null;
     else
-        node_ = std::static_pointer_cast<Node>(stmts());
+        node_ = std::static_pointer_cast<Node>(stmts_);
 
     if (newScope) // popping scope
         _scope = _scope->parent();
@@ -232,11 +232,16 @@ std::shared_ptr<Stmt> Parser::stmt() {
         node_ = decl();
     else if (_token->tag() == Token::RETURN)
         node_ = ret();
+    else if (_token->tag() == Token::ID)
+        node_ = std::make_shared<ExprStmt>(expr());
+    else if (_token->tag() == Token::NUM)
+        node_ = std::make_shared<ExprStmt>(expr());
     else
         return Stmt::Null;
 
     TRY_MATCH_ELSE(';', nullptr);
 
+    std::cout << "Parsed node " << node_->toString();
     return node_;
 }
 

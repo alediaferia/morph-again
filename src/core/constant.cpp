@@ -15,9 +15,10 @@ std::string Constant::toString() const {
     return ss.str();
 }
 
-Value Constant::toValue() const {
+std::unique_ptr<Value> Constant::toValue() const {
     std::ostringstream ss;
-    ss << "$" << token()->toString();
+    if (token()->tag() == Token::NUM)
+    	ss << "mov $" << std::static_pointer_cast<Num>(token())->value() << ", %eax";
 
-    return ss.str();
+    return std::unique_ptr<Value>(new Value(ss.str()));
 }

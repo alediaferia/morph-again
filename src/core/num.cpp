@@ -16,3 +16,7 @@ std::string Num::toString() const {
     ss << "Num( " << _value << " )";
     return ss.str();
 }
+
+int Num::value() const {
+	return _value;
+}

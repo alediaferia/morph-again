@@ -15,3 +15,7 @@ std::string ExprStmt::toString() const {
     ss << "Stmt (Expr): " << _expr->toString();
     return ss.str();
 }
+
+std::unique_ptr<Value> ExprStmt::toValue() const {
+	return _expr->toValue();
+}

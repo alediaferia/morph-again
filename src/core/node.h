@@ -6,6 +6,7 @@
 #define NODE_H
 
 #include <string>
+#include <memory>
 
 #include "value.h"
 
@@ -18,7 +19,7 @@ public:
 
     virtual std::string toString() const;
 
-    virtual Value toValue() const;
+    virtual std::unique_ptr<Value> toValue() const;
 };
 
 

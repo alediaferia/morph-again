@@ -17,7 +17,11 @@ int main(int argc, char *argv[]) {
         std::getline(std::cin, input);
         parser.setInput(input);
 
-        std::cout << std::endl << "~> " << parser.program(false)->toString() << std::endl;
+        auto node = parser.program(false);
+        std::cout << std::endl << "~> " << node->toString() << std::endl;
+        std::cout << "Code Generation:" << std::endl;
+        std::cout << "================" << std::endl;
+        std::cout << node->toValue()->toString() << std::endl;
     }
 
     return 0;

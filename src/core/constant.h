@@ -1,6 +1,8 @@
 #ifndef CONSTANT_H
 #define CONSTANT_H
 
+#include <memory>
+
 #include "expr.h"
 #include "token.h"
 #include "type.h"
@@ -13,6 +15,6 @@ public:
 
     std::string toString() const override;
 
-    Value toValue() const override;
+    std::unique_ptr<Value> toValue() const override;
 };
 #endif // CONSTANT_H

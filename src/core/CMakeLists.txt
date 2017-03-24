@@ -24,6 +24,7 @@ seq.cpp
 fn.cpp
 ret.cpp
 exprstmt.cpp
+value.cpp
 )
 
 add_library(morphcore STATIC ${sources})

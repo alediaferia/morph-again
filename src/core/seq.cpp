@@ -24,3 +24,11 @@ std::string Seq::toString() const {
 
 	return ss.str();
 }
+
+std::unique_ptr<Value> Seq::toValue() const {
+	std::ostringstream ss;
+	ss << _s1->toValue()->toString() << std::endl;
+	ss << _s2->toValue()->toString() << std::endl;
+
+	return std::unique_ptr<Value>(new Value(ss.str()));
+}

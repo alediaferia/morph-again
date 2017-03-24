@@ -12,6 +12,6 @@ std::string Node::toString() const {
     return "<node>";
 }
 
-Value Node::toValue() const {
-    return Value();
+std::unique_ptr<Value> Node::toValue() const {
+    return std::unique_ptr<Value>(new Value());
 }

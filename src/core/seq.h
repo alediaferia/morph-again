@@ -11,6 +11,8 @@ public:
     std::shared_ptr<Stmt> stmt2() const;
 
     std::string toString() const override;
+
+    std::unique_ptr<Value> toValue() const override;
 private:
     std::shared_ptr<Stmt> _s1;
     std::shared_ptr<Stmt> _s2;

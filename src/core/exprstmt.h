@@ -12,6 +12,8 @@ public:
     std::shared_ptr<Expr> expr() const;
 
     std::string toString() const override;
+
+    std::unique_ptr<Value> toValue() const override;
 private:
     std::shared_ptr<Expr> _expr;
 };

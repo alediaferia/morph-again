@@ -24,3 +24,29 @@ std::string Arith::toString() const {
 
     return ss.str();
 }
+
+std::unique_ptr<Value> Arith::toValue() const {
+    auto left = _expr1->toValue();
+    auto right = _expr2->toValue();
+
+    const char *op;
+    switch(**token()) {
+        case '+':
+            op = "addl"; break;
+        case '-':
+            op = "subl"; break;
+        case '*':
+            op = "imul"; break;
+        default:
+            return nullptr;
+    }
+
+    std::ostringstream ss;
+    ss << left->toString() << std::endl;
+    ss << "push %rax" << std::endl;
+    ss << right->toString() << std::endl;
+    ss << "pop %rbx" << std::endl;
+    ss << op << " %ebx, %eax" << std::endl;
+
+    return std::unique_ptr<Value>(new Value(ss.str()));
+}
